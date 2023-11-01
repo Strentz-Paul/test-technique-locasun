@@ -1,0 +1,2 @@
+grumphp:
+    tasks: { phpunit: null, phpstan: null, phpcs: null }
