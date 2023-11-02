@@ -1,10 +1,12 @@
 {
+    "name": "test/locasun",
+    "description": "test technique pour l'entreprise Locasun",
     "type": "project",
     "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^2.0",
@@ -36,6 +38,7 @@
         "symfony/string": "6.3.*",
         "symfony/translation": "6.3.*",
         "symfony/twig-bundle": "6.3.*",
+        "symfony/uid": "6.3.*",
         "symfony/validator": "6.3.*",
         "symfony/web-link": "6.3.*",
         "symfony/yaml": "6.3.*",
@@ -92,6 +95,8 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "fakerphp/faker": "^1.23",
         "phpro/grumphp-shim": "^2.2",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-doctrine": "^1.3",

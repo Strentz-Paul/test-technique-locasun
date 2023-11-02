@@ -1,4 +1,4 @@
-FROM thecodingmachine/php:8.1-v4-fpm
+FROM thecodingmachine/php:8.2-v4-fpm
 
 ENV PHP_EXTENSION_PGSQL=1
 ENV PHP_EXTENSION_PDO_PGSQL=1
@@ -13,6 +13,10 @@ ENV PHP_INI_POST_MAX_SIZE=30M
 ENV TZ="Europe/Paris"
 
 RUN sudo apt-get update
+
+RUN sudo apt-get install -y libonig-dev \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-enable mbstring
 
 RUN sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/*

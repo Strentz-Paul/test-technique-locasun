@@ -1,2 +1,10 @@
 grumphp:
-    tasks: { phpunit: null, phpstan: null, phpcs: null }
+    git_hook_variables:
+        EXEC_GRUMPHP_COMMAND: 'docker-compose run --rm php '
+    tasks:
+        composer: ~
+        phpcs: ~
+        phpstan: ~
+        shell:
+            scripts:
+                - [ "-c", "bin/phpunit" ]

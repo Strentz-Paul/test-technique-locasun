@@ -5,4 +5,11 @@ parameters:
         - config/
         - public/
         - src/
-        - tests/
+    excludePaths:
+        - vendor/*
+        - tests/*
+    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+    		-
+    		    message: '#Method App\\Entity\\Vehicule\\VehiculeModele::setMarque\(\) is unused.#'
+    		    path: src/Entity/Vehicule/VehiculeModele.php
