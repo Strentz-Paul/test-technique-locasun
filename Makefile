@@ -39,4 +39,9 @@ clear:
 	php ./bin/console cache:clear
 
 run-test:
-	php ./bin/phpunit
+	$(DOCKER_COMPOSE_DEV) run --rm php bash -ci "php ./bin/phpunit"
+
+install-start:
+	$(MAKE) install
+	$(MAKE) fixtures-install
+	$(MAKE) start

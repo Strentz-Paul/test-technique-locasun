@@ -14,9 +14,5 @@ ENV TZ="Europe/Paris"
 
 RUN sudo apt-get update
 
-RUN sudo apt-get install -y libonig-dev \
-    && docker-php-ext-install mbstring \
-    && docker-php-ext-enable mbstring
-
 RUN sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/*

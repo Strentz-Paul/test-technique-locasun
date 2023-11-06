@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VehiculeModeleRepository extends ServiceEntityRepository
 {
+    public const ALIAS_VEHICULE = "vehicule";
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, VehiculeModele::class);

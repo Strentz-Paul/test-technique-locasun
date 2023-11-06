@@ -1,0 +1,211 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test technique | Paul STRENTZ{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .info {font-size: 12px; color:grey;}
+</style>
+<div class="example-wrapper">
+   <div class="col-12" id="select-annonce">
+      <h3>Selectionner une annonce ?</h3>
+      <select>
+         <option value="0" selected>Créer une annonce</option>
+         {% for annonce in annonces %}
+            <option value="{{ annonce.id }}">{{ annonce.titre }}</option>
+         {% endfor %}
+      </select>
+   </div>
+   <div class="col-12">
+      <h3>Choix des arguments</h3>
+      <div class="custom-select" id="typeAnnonce" style="width:200px;">
+         <select>
+            <option value="0" selected disabled>Séléctionner un type d'annonce :</option>
+            <option value="Immobilier">Immobilier</option>
+            <option value="Emploi">Emploi</option>
+            <option value="Automobile">Automobile</option>
+         </select>
+      </div>
+      <div class="m-t-20">
+         <label for="#titre">Titre de l'annonce : </label>
+         <input type="text" placeholder="Titre de l'annonce" name="titre"/>
+      </div>
+      <div class="m-t-20">
+         <textarea name="contenu" rows="10" cols="50">Contenu de l'annonce</textarea>
+      </div>
+      <div class="m-t-40">
+         <label for="#modele">Modèle de voiture <span class="info">(si vous complétez ce champ alors l'annonce sera automatiquement une annonce automobile) </span>: </label>
+         <input type="text" placeholder="Modèle de la voiture" name="modele"/>
+         <p id="marque" style="display: none; font-size: 12px"></p>
+      </div>
+   </div>
+   <div style="width:100%">
+      <button onclick="createAnnonce()" id="create-button">Créer une annonce</button>
+      <button onclick="updateAnnonce()" id="update-button" style="display: none;">Mettre à jour l'annonce</button>
+      <button onclick="removeAnnonce()" id="remove-button" style="display: none;">Supprimer l'annonce</button>
+   </div>
+
+   <div id="resultat-part" style="display: none">
+      <hr style="margin-top: 30px;">
+      <h4>Resultats</h4>
+         <textarea name="result" id="result" rows="10" cols="50"></textarea>
+   </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+   <script>
+      function createJSON() {
+         var typeAnnonce = document.querySelector('#typeAnnonce select').value;
+
+         if (typeAnnonce === '0') {
+            window.alert("Merci de choisir un type d'annonce")
+            return null;
+         }
+
+         var id = document.querySelector('#select-annonce select').value;
+         var titre = document.querySelector('[name="titre"]').value;
+         var contenu = document.querySelector('[name="contenu"]').value;
+         var modele = document.querySelector('[name="modele"]').value;
+
+         if (typeAnnonce === 'Automobile' && modele === '') {
+            window.alert("Merci de renseigner un modèle de voiture")
+            return null;
+         }
+
+         var jsonObject = {
+            categorie: typeAnnonce,
+            titre: titre,
+            contenu: contenu,
+            id: id
+         };
+
+         if (modele !== '') {
+            jsonObject.modele = modele;
+         }
+         return jsonObject;
+      }
+
+      function createAnnonce() {
+         var body = createJSON()
+         if (body === null) {
+            return;
+         }
+         var xhr = new XMLHttpRequest();
+
+         xhr.open('POST', 'http://localhost:8180/annonce', true);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+
+         xhr.onload = function() {
+            var response = formatJson(xhr.responseText)
+            document.querySelector('#resultat-part').style.display = 'inline-block';
+            document.querySelector('#result').innerText = response;
+         };
+         xhr.onerror = function() {
+            console.error('Erreur réseau lors de la requête.');
+         };
+
+         xhr.send(JSON.stringify(body));
+
+      }
+
+      function updateAnnonce() {
+         var body = createJSON()
+         if (body === null) {
+            return;
+         }
+         var xhr = new XMLHttpRequest();
+         var url = 'http://localhost:8180/annonce/' + body.id;
+         console.log(body)
+         xhr.open('PUT', url, true);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+
+         xhr.onload = function() {
+            var response = formatJson(xhr.responseText)
+            document.querySelector('#resultat-part').style.display = 'inline-block';
+            document.querySelector('#result').innerText = response;
+         };
+         xhr.onerror = function() {
+            console.error('Erreur réseau lors de la requête.');
+         };
+
+         xhr.send(JSON.stringify(body));
+      }
+
+      function removeAnnonce() {
+         var body = createJSON()
+         if (body === null) {
+            return;
+         }
+         var xhr = new XMLHttpRequest();
+
+         xhr.open('DELETE', 'http://localhost:8180/annonce/' + body.id, true);
+         xhr.setRequestHeader('Content-Type', 'application/json');
+
+         xhr.onload = function() {
+            console.log(xhr.responseText);
+            document.querySelector('#resultat-part').style.display = 'inline-block';
+            document.querySelector('#result').innerText = xhr.responseText;
+         };
+         xhr.onerror = function() {
+            console.error('Erreur réseau lors de la requête.');
+         };
+
+         xhr.send(JSON.stringify(body));
+      }
+
+      function resetFields() {
+         document.querySelector('#typeAnnonce select').value = '0';
+         document.querySelector('[name="titre"]').value = '';
+         document.querySelector('[name="contenu"]').value = '';
+         document.querySelector('[name="modele"]').value = '';
+         document.querySelector('#marque').style.display = 'none'
+      }
+
+      function fillFields(annonceId) {
+         var annonces = {{ annonces_json|json_encode|raw }};
+         var selectedAnnonce = annonces.find(function(annonce) {
+            return annonce.id == annonceId;
+         });
+         console.log(selectedAnnonce)
+         document.querySelector('#typeAnnonce select').value = selectedAnnonce.categorie;
+         document.querySelector('[name="titre"]').value = selectedAnnonce.titre;
+         document.querySelector('[name="contenu"]').value = selectedAnnonce.contenu;
+         document.querySelector('[name="modele"]').value = selectedAnnonce.modele || '';
+         if (selectedAnnonce.marque) {
+            document.querySelector('#marque').style.display = 'inline-block'
+            document.querySelector('#marque').innerHTML = ' -- Marque : '  + selectedAnnonce.marque;
+         } else {
+            document.querySelector('#marque').style.display = 'none'
+         }
+      }
+
+      function formatJson(response) {
+         var responseClean = response.replace(/\\/g, '');
+         var decoded = JSON.parse(decodeURIComponent(responseClean));
+         return JSON.stringify(decoded);
+      }
+
+      function replaceUnicode(match, p1, p2, offset, string) {
+         return String.fromCharCode(parseInt(p2, 16));
+      }
+
+      document.querySelector('#select-annonce select').addEventListener('change', function() {
+         var selectedValue = this.value;
+
+         if (selectedValue === '0') {
+            resetFields();
+            document.querySelector('#remove-button').style.display = 'none';
+            document.querySelector('#update-button').style.display = 'none';
+            document.querySelector('#create-button').style.display = "inline-block";
+         } else {
+            fillFields(selectedValue);
+            document.querySelector('#create-button').style.display = "none";
+            document.querySelector('#update-button').style.display = "inline-block";
+            document.querySelector('#remove-button').style.display = 'inline-block';
+         }
+      });
+   </script>
+
+{% endblock %}

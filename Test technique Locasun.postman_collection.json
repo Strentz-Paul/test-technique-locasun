@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "58d803e7-4be7-4b0b-834f-c8ce24822a07",
+		"name": "Test technique Locasun",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17964484"
+	},
+	"item": [
+		{
+			"name": "Récuperer toutes les annonces",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/annonces",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"annonces"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Créer une annonce",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"titre\": \"Lorem\",\n    \"categorie\": \"Immobilier\",\n    \"contenu\": \"Ipsum\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/annonce",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"annonce"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modifier une annonce",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"titre\": \"Lorem\",\n    \"categorie\": \"Immobilier\",\n    \"contenu\": \"Ipsum\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8180/annonce/018ba539-530c-75d1-be82-7e96b4224aea",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"annonce",
+						"018ba539-530c-75d1-be82-7e96b4224aea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Supprimer une annonce",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/annonce/018ba539-530c-75d1-be82-7e96b4224aea",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"annonce",
+						"018ba539-530c-75d1-be82-7e96b4224aea"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consulter une annonce",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8180/annonce/018ba539-5304-7240-889c-61361a26ddbe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8180",
+					"path": [
+						"annonce",
+						"018ba539-5304-7240-889c-61361a26ddbe"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

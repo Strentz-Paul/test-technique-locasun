@@ -7,4 +7,4 @@ grumphp:
         phpstan: ~
         shell:
             scripts:
-                - [ "-c", "bin/phpunit" ]
+                - [ "-c", "docker-compose run --rm php 'bin/phpunit'" ]

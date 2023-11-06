@@ -1,30 +1,49 @@
-# Symfony6-docker
+# Test technique Locasun
 
-Starter kit pour applications Symfony
+Bonjour, merci pour votre temps;
 
-## Specifications:
-- php 8.1 (à partir de l'image v4-fpm de the-coding-machine)
-- symfony 6.2 mode webapp, avec webpack-encore
-- composer 2.5
-- postgresql 15
-- nginx 1.23.4-alpine
-- node-js 19-alpine (npm@latest, jquery 3.6, bootstrap 5 et fontawesome 6)
-- mailcatcher
-- Versions utilisées pour le build : docker-20.10.12 / docker-compose-1.29.2
+## Installer et demarrer l'application:
+Il faut que Docker soit installé, il suffit alors de lancer la commande 
+```bash
+ make install-start
+  ```
+et de se rendre sur l'url: http://localhost:8180
 
-## Quality tools:
-- phpstan 1.10
-- squizlabs/php_codesniffer 3.7
-- phpunit 9.5
+## Utilisation
+Une fois sur cette page, j'ai réalisé une petite interface graphique très simple afin de pouvoir utiliser les endpoints api (veuillez m'excuser le fait de ne pas avoir fait la traduction des Unicode). Vous pouvez cependant également utiliser la collection Postman qui se trouve dans le dossier sous le nom "Test technique Locasun.postman_collection.json".
 
-## Utilisation :
-- make install : build des images docker, composer install, npm install et build assets
-- make start : démarrage des images php, nginx et postgresql
-- make stop : arrêt des containers du projet
-- make connect / node-connect : shell dans les containers php / nodejs
-- make clear : vidage du cache
-- make composer-update : mise à jour des vendors php
-- make node-install : installation des vendors js
-- make node-build : compilation des assets js et scss
+Et pour finir voici les requêtes curl pour tester l'application:
 
-- url par défaut en mode dev : http://localhost:8180
+### Requêtes Curl:
+
+**Consultation de toutes les annonces** :
+```bash
+curl -X GET http://localhost:8180/annonces
+```
+
+**Consultation d'une seule annonce avec son uuid** (Attention à bien changé l'uuid) : 
+```bash
+curl -X GET http://localhost:8180/annonce/{uuid}
+```
+
+**Creation d'une annonce** : 
+```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"categorie":"Automobile", "titre":"Lorem", "contenu": "ipsum", "modele": "RS4"}' http://localhost:8180/annonce
+  ```
+
+**Modification d'une annonce** (Attention à bien changé l'uuid) :
+```bash
+  curl -X PUT -H "Content-Type: application/json" -d '{"categorie":"Automobile", "titre":"Lorem", "contenu": "ipsum", "modele": "RS4"}' http://localhost:8180/annonce/{uuid}
+  ```
+
+**Suppression d'une annonce** (Attention à bien changé l'uuid) :
+```bash
+  curl -X DELETE http://localhost:8180/annonce/{uuid}
+  ```
+
+
+## Complément/Explication
+
+J'ai utilisé similar_text et la distance de levenshtein afin de trouver le bon matching entre l'input et les modèles de voitures. J'ai cependant donné 3 fois plus d'importance à la distance de levenshtein lors de la comparaison de ces deux valeurs afin de m'assurer que similar_text a un pourcentage assez haut pour que la donnée soit bonne.
+
+Je serai ravi d'échanger avec vous sur votre manière d'implémenter cet algorithme.
